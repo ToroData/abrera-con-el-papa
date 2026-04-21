@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Fondo circular oscuro -->
+  <circle cx="16" cy="16" r="15" fill="#06060B" stroke="#FFD95A" stroke-width="1"/>
+  <!-- Cruz católica latina (brazo largo abajo) -->
+  <!-- Palo vertical -->
+  <rect x="14" y="5" width="4" height="22" rx="0.6" fill="#FFD95A"/>
+  <!-- Palo horizontal -->
+  <rect x="8" y="10" width="16" height="4" rx="0.6" fill="#FFD95A"/>
+</svg>
