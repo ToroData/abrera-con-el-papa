@@ -1,26 +1,10 @@
-/* =========================================================
-   CONFIG — Parròquia Sant Pere Apòstol · Abrera
-   Vigília Papal · Montjuïc 2026
-   Edita només aquest fitxer per a configurar la web.
-   ========================================================= */
-
 window.CONFIG = {
-  // Data i hora de la vigília: Dimarts 9 de juny de 2026, 20:00 (Europe/Madrid)
   vigiliaDate: '2026-06-09T20:00:00',
-
   parrish: 'Sant Pere d\'Abrera · Abrera',
   diocese: 'Diòcesi de Sant Feliu de Llobregat',
   location: 'Montjuïc · Barcelona',
-
-  // URL de l'API de Google Apps Script (desplegada com a web app).
-  // Veure README.md per com desplegar. Substitueix pel teu /exec URL.
   sheetsApiUrl: 'https://script.google.com/macros/s/AKfycbxMS4KOd7QJ07XMZQJ2ph5TVJQvIdqHWV3fCWrR_GakyEQj5bEVZpuvAGU0dJqbab1f/exec',
-
-  // Demo mode (stress test): força N intencions aleatòries si no hi ha API.
-  // Valors útils per provar la constel·lació: 100, 500, 2000.
   demoIntentions: 0,
-
-  // Valors per defecte si la API no respon
   fallback: {
     metrics: {
       inscrits: 247,

@@ -1,72 +1,43 @@
-/* =========================================================
-   Campanile — constellation points that trace the bell tower
-   of Sant Pere Apòstol d'Abrera.
-   Used for: loader reveal + nav/footer logomark.
-   Coordinates normalized to a 100 x 115 viewBox.
-   ========================================================= */
-
 window.CAMPANILE = {
   viewBox: { w: 100, h: 115 },
-  // Ordered points — draws from base up, then cross last
   points: [
-    // Base plinth
     { x: 28,  y: 105 }, { x: 72, y: 105 },
     { x: 28,  y: 100 }, { x: 72, y: 100 },
-    // Lower body left/right verticals
     { x: 30,  y: 88  }, { x: 70, y: 88  },
-    // Door level
     { x: 45,  y: 100 }, { x: 55, y: 100 },
     { x: 45,  y: 86  }, { x: 55, y: 86  },
-    // Mid level windows (upper body)
     { x: 30,  y: 72  }, { x: 70, y: 72  },
     { x: 40,  y: 70  }, { x: 60, y: 70  },
     { x: 40,  y: 55  }, { x: 60, y: 55  },
-    // Division line
     { x: 28,  y: 50  }, { x: 72, y: 50  },
-    // Top arches (belfry)
     { x: 28,  y: 38  }, { x: 72, y: 38  },
     { x: 36,  y: 36  }, { x: 64, y: 36  },
     { x: 36,  y: 22  }, { x: 64, y: 22  },
-    // Cornice
     { x: 26,  y: 18  }, { x: 74, y: 18  },
     { x: 30,  y: 14  }, { x: 70, y: 14  },
-    // Roof pitch
     { x: 40,  y: 8   }, { x: 60, y: 8   },
     { x: 50,  y: 4   },
-    // Cross
     { x: 50,  y: 0   },
     { x: 46,  y: 2   }, { x: 54, y: 2   },
   ],
-  // Pairs of indices — lines connecting points to form the outline
+  
   lines: [
-    // base
     [0, 1], [2, 3], [0, 2], [1, 3],
-    // lower body verticals
     [2, 4], [3, 5],
-    // door
     [6, 8], [7, 9], [8, 9],
-    // upper body outline
     [4, 10], [5, 11],
-    // arches (columns)
     [10, 18], [11, 19],
-    // inner belfry windows
     [12, 14], [13, 15], [14, 15],
-    // division line
     [16, 17],
-    // cornice
     [18, 24], [19, 25],
     [24, 26], [25, 27],
     [26, 28], [27, 29],
-    // roof peak
     [28, 30], [29, 30],
-    // cross vertical
     [30, 31],
-    // cross horizontal
     [32, 33],
   ],
 };
 
-// Helper: render as SVG (for nav logo, footer logo, inline)
 window.renderCampanileSVG = function (opts) {
   opts = opts || {};
   const stroke = opts.stroke || 'currentColor';

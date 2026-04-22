@@ -1,8 +1,3 @@
-/* =========================================================
-   i18n — Catalan (ca) / Spanish (es)
-   Toggle instantani sense recarregar.
-   ========================================================= */
-
 window.I18N = {
   ca: {
     // Nav
@@ -39,7 +34,7 @@ window.I18N = {
     'hero.subtitle': 'Una nit d\'oració sota les estrelles',
     'hero.event': '20:00h · Montjuïc, Barcelona · Vigília de pregària',
     'hero.cta.primary': 'Deixa la teva intenció',
-    'hero.cta.ghost': 'Llegir del rector',
+    'hero.cta.ghost': 'Carta del rector',
     'hero.countdown.days': 'Dies',
     'hero.countdown.hours': 'Hores',
     'hero.countdown.mins': 'Minuts',
@@ -150,7 +145,7 @@ window.I18N = {
     'hero.subtitle': 'Una noche de oración bajo las estrellas',
     'hero.event': '20:00h · Montjuïc, Barcelona · Vigilia de oración',
     'hero.cta.primary': 'Deja tu intención',
-    'hero.cta.ghost': 'Leer del rector',
+    'hero.cta.ghost': 'Carta del rector',
     'hero.countdown.days': 'Días',
     'hero.countdown.hours': 'Horas',
     'hero.countdown.mins': 'Minutos',

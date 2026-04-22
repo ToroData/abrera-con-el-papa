@@ -1,11 +1,3 @@
-/* =========================================================
-   Starfield + Incense particles
-   - 200 estrelles daurades fixes amb parpelleig sinusoïdal
-   - Partícules d'encens pujant lentament
-   - Parallax sutil al scroll
-   - Pause quan no és visible
-   ========================================================= */
-
 (function () {
   'use strict';
 

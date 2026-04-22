@@ -1,11 +1,6 @@
-/* =========================================================
-   main.js — v3 (papal, loader animation, post modal)
-   ========================================================= */
 (function () {
   'use strict';
   const CONFIG = window.CONFIG;
-
-  // ---------- Loader: constellation → logo reveal ----------
   function runLoader(done) {
     const canvas = document.getElementById('loader-canvas');
     const logoImg = document.getElementById('loader-logo');
@@ -26,7 +21,6 @@
     const pts = CAMP.points.map((p) => ({ nx: p.x, ny: p.y }));
     const lines = CAMP.lines;
 
-    // Map campanile coords (viewBox 100x115) into canvas (preserve aspect + padding)
     function project() {
       const pad = Math.min(w, h) * 0.08;
       const aw = w - pad * 2, ah = h - pad * 2;
@@ -38,12 +32,6 @@
     project();
     window.addEventListener('resize', project);
 
-    // Animation phases:
-    // 0: scatter stars (random positions)
-    // 1: stars travel to their constellation points (800ms)
-    // 2: lines draw progressively (1100ms)
-    // 3: logo fades in, constellation fades out (700ms)
-    // 4: overall fade out (handled by css .done)
     const scatter = pts.map(() => ({ x: Math.random() * w, y: Math.random() * h }));
     const start = performance.now();
     const TRAVEL = 900;
@@ -76,7 +64,6 @@
       const t = now - start;
       ctx.clearRect(0, 0, w, h);
 
-      // Phase 1: travel
       const pTravel = Math.min(1, t / TRAVEL);
       pts.forEach((p, i) => {
         const s = scatter[i];
@@ -87,7 +74,6 @@
         drawStar(x, y, r, 0.7 + 0.3 * pTravel, true);
       });
 
-      // Phase 2: lines
       if (t > LINES_DELAY) {
         const pLines = Math.min(1, (t - LINES_DELAY) / LINES);
         const totalLines = lines.length;
@@ -112,11 +98,9 @@
         });
       }
 
-      // Phase 3: logo reveal
       if (t > LOGO_DELAY) {
         const pLogo = Math.min(1, (t - LOGO_DELAY) / LOGO);
         logoImg.style.opacity = String(ease(pLogo));
-        // fade out canvas stars into logo
         ctx.fillStyle = `rgba(6, 6, 11, ${pLogo * 0.5})`;
         ctx.fillRect(0, 0, w, h);
       }
@@ -130,7 +114,6 @@
     requestAnimationFrame(frame);
   }
 
-  // ---------- Scene navigator ----------
   const scroller = document.getElementById('scroller');
   const scenes = [...document.querySelectorAll('.scene')];
   const TOTAL = scenes.length;
@@ -140,10 +123,6 @@
   function setScene(i, immediate, fromUser) {
     current = Math.max(0, Math.min(TOTAL - 1, i));
     if (isMobile()) {
-      // Native vertical scroll on mobile. Only scroll the user when THEY
-      // explicitly requested it (clicked a nav arrow / dot / data-goto link).
-      // Never on resize, never on boot, never on language change — those are
-      // what were yanking the page to the top when the URL bar toggled.
       if (fromUser && !immediate) {
         const y = scenes[current].getBoundingClientRect().top + window.scrollY - 4;
         window.scrollTo({ top: y, behavior: 'auto' });
@@ -212,7 +191,6 @@
       else if (e.key === 'End') { setScene(TOTAL - 1, false, true); }
     });
 
-    // Natural vertical scroll → horizontal scene transitions
     let wheelLock = false;
     window.addEventListener('wheel', (e) => {
       if (isMobile() || wheelLock) return;
@@ -239,15 +217,10 @@
     }, { passive: true });
 
     window.addEventListener('resize', () => {
-      // On mobile, never re-scroll — that's what causes the page to jump to
-      // the top when the address bar shows/hides. Just update the transform
-      // on desktop so the horizontal layout stays in sync.
       if (isMobile()) return;
       setScene(current, true);
     }, { passive: true });
 
-    // Mobile: keep `current` in sync with native scroll so the HUD + sceneX
-    // classes stay accurate (fixes stale state after URL bar resize).
     if (isMobile()) {
       const syncFromScroll = () => {
         const vh = window.innerHeight;
@@ -274,7 +247,6 @@
     }
   }
 
-  // ---------- Countdown ----------
   function startCountdown() {
     const target = new Date(CONFIG.vigiliaDate).getTime();
     const elD = document.getElementById('cd-days');
@@ -299,7 +271,6 @@
     }
   }
 
-  // ---------- Count-up ----------
   function countUp(el, target) {
     const start = performance.now();
     const dur = 1800;
@@ -319,7 +290,6 @@
     });
   }
 
-  // ---------- Data ----------
   async function fetchJson(url) {
     try { const r = await fetch(url); if (!r.ok) throw 0; return await r.json(); } catch { return null; }
   }
@@ -353,7 +323,6 @@
     if (cstCount && m.intencions != null) countUp(cstCount, m.intencions);
   }
 
-  // ---------- Posts (expandable modal) ----------
   function renderPosts(posts) {
     const grid = document.getElementById('posts-grid');
     if (!grid) return;
@@ -403,7 +372,6 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') m.classList.remove('show'); });
   }
 
-  // ---------- Gallery ----------
   function renderGallery(items) {
     const wrap = document.getElementById('gallery-wrap');
     if (!wrap) return;
@@ -464,7 +432,6 @@
     })();
   }
 
-  // ---------- Intention modal ----------
   function setupIntentionModal() {
     const modal = document.getElementById('intention-modal');
     if (!modal) return;
@@ -523,7 +490,6 @@
     });
   }
 
-  // ---------- Lightbox ----------
   function openLightbox(url, caption) {
     const lb = document.getElementById('lightbox');
     if (!lb) return;
@@ -537,7 +503,6 @@
     lb.addEventListener('click', (e) => { if (e.target === lb || e.target.classList.contains('lightbox-close')) lb.classList.remove('show'); });
   }
 
-  // ---------- Lang ----------
   function setupLang() {
     document.querySelectorAll('[data-lang]').forEach((b) => {
       b.addEventListener('click', () => {
@@ -552,7 +517,6 @@
     });
   }
 
-  // ---------- Helpers ----------
   function escapeHTML(s) {
     return String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
@@ -566,7 +530,6 @@
     } catch { return String(d); }
   }
 
-  // ---------- Boot ----------
   async function boot() {
     document.documentElement.setAttribute('lang', window.I18N_STATE.lang);
     window.applyI18n();
@@ -585,8 +548,6 @@
 
     startCountdown();
 
-    // Stress-test mode: if CONFIG.demoIntentions > 0, spawn N fake stars to
-    // preview how the chart scales with many intentions (pan/zoom gestures).
     if (CONFIG.demoIntentions && CONFIG.demoIntentions > 0) {
       window.ConstellationAPI?.stressTest(CONFIG.demoIntentions);
     } else {
@@ -595,8 +556,7 @@
 
     const data = await loadData();
     if (data.metrics) renderMetrics(data.metrics);
-    // Always reseed with the API response (even empty arrays), otherwise the
-    // fallback stars stay on screen when the Sheet has no rows.
+
     if (data.intentions && !CONFIG.demoIntentions) window.ConstellationAPI?.seed(data.intentions);
     if (data.posts) { window.__lastPosts = data.posts; renderPosts(data.posts); }
     renderGallery(data.gallery);
