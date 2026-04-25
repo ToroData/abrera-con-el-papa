@@ -513,12 +513,27 @@ h1, h2, h3, h4 {
 .hero-event-row .k { color: var(--text-hint); min-width: 80px; }
 .hero-event-row .v { color: var(--vatican-white); font-weight: 500; }
 .hero-event-row .v.gold { color: var(--vatican-yellow); }
+.gold { color: var(--vatican-yellow); }
 
-.hero-ctas { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-2); }
+.hero-ctas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-3);
+  margin-top: var(--s-2);
+}
+@media (max-width: 900px) {
+  .hero-ctas { grid-template-columns: 1fr 1fr; }
+  .hero-ctas .btn-map { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+  .hero-ctas { grid-template-columns: 1fr; }
+  .hero-ctas .btn-map { grid-column: auto; }
+}
 
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--s-3);
   padding: 14px 22px;
   font-family: var(--font-mono);
@@ -527,32 +542,112 @@ h1, h2, h3, h4 {
   text-transform: uppercase;
   font-weight: 500;
   cursor: pointer;
-  transition: all 200ms ease;
+  transition: all 220ms ease;
   border: 1px solid transparent;
+  position: relative;
+  width: 100%;
 }
+
 .btn-primary {
   background: var(--vatican-yellow);
   color: var(--ink);
-  font-weight: 600;
+  font-weight: 700;
+  border-color: var(--vatican-yellow);
+  padding-left: 18px;
+  padding-right: 18px;
+}
+.btn-primary::before {
+  content: '+';
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  opacity: 0.85;
+  margin-right: 2px;
 }
 .btn-primary:hover {
   background: var(--vatican-yellow-2);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(255, 217, 90, 0.25);
+  border-color: var(--vatican-yellow-2);
+  box-shadow: 0 0 28px rgba(255, 217, 90, 0.28), 0 4px 16px rgba(255, 217, 90, 0.18);
 }
+.btn-primary:hover .arrow { transform: translateX(4px); }
+
+/* ── Ghost: borde fosc daurat, icona ploma ── */
 .btn-ghost {
-  border-color: var(--line-strong);
+  border-color: rgba(184, 133, 47, 0.55);
   color: var(--vatican-white);
+  background: transparent;
 }
 .btn-ghost:hover {
-  border-color: var(--vatican-yellow);
+  border-color: var(--vatican-yellow-deep);
   color: var(--vatican-yellow);
+  background: rgba(184, 133, 47, 0.07);
 }
+
+.btn-map {
+  border-color: rgba(184, 133, 47, 0.35);
+  color: var(--text-dim);
+  background: transparent;
+  gap: var(--s-3);
+  padding: 14px 16px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+.btn-map:hover {
+  border-color: rgba(184, 133, 47, 0.65);
+  color: var(--vatican-white);
+}
+.btn-map:hover .btn-map-arrow { transform: translateX(3px); }
+.btn-map-icon {
+  flex: 0 0 auto;
+  width: 32px; height: 32px;
+  opacity: 0.65;
+  transition: opacity 220ms;
+}
+.btn-map:hover .btn-map-icon { opacity: 0.95; }
+.btn-map-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  text-align: left;
+}
+.btn-map-label {
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  color: var(--text-hint);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  line-height: 1;
+}
+.btn-map-title {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--vatican-white);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.btn-map-arrow {
+  margin-left: auto;
+  color: var(--text-hint);
+  font-size: 14px;
+  transition: transform 220ms;
+  flex: 0 0 auto;
+}
+.btn-map:hover .btn-map-arrow { color: var(--vatican-white); }
+
 .btn-red {
   background: var(--cardinal-red);
   color: var(--vatican-white);
+  border-color: var(--cardinal-red);
 }
-.btn-red:hover { background: var(--cardinal-red-bright); }
+.btn-red:hover {
+  background: var(--cardinal-red-bright);
+  border-color: var(--cardinal-red-bright);
+}
+
 .btn .arrow { transition: transform 200ms; }
 .btn:hover .arrow { transform: translateX(3px); }
 

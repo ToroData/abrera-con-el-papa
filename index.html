@@ -128,7 +128,7 @@
           </h1>
 
           <p class="hero-sub" data-i18n="hero.sub">
-            La Parròquia Sant Pere d'Abrera camina cap a Montjuïc amb tota la Diòcesi de Sant Feliu. Una vigília de pregària, silenci i estrelles.
+            La <span class="gold">Parròquia Sant Pere d'Abrera</span> camina cap a Montjuïc amb tota la Diòcesi de Sant Feliu. Una vigília de pregària, silenci i estrelles.
           </p>
 
           <div class="hero-event">
@@ -142,17 +142,48 @@
             </div>
             <div class="hero-event-row">
               <span class="k" data-i18n="hero.k.who">Qui</span>
-              <span class="v" data-i18n="hero.who">Oberta a tota la diòcesi</span>
+              <span class="v" data-i18n="hero.who">Oberta a tota la comunitat</span>
             </div>
           </div>
 
           <div class="hero-ctas">
+            <!-- CTA 1: Primary — amarillo sòlid -->
             <button type="button" class="btn btn-primary" data-open-intention>
               <span data-i18n="hero.cta.primary">Deixa la teva intenció</span>
               <span class="arrow">→</span>
             </button>
+
+            <!-- CTA 2: Ghost — borde daurat fosc, icona ploma -->
             <button type="button" class="btn btn-ghost" data-goto="4">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true" style="opacity:.7;flex-shrink:0">
+                <path d="M13 2 C13 2 10 3 7 7 L4 12 L7 11 C9 8 12 5 14 3 Z"/>
+                <path d="M4 12 L5 9" stroke-linecap="round"/>
+              </svg>
               <span data-i18n="hero.cta.ghost">Carta del rector</span>
+            </button>
+
+            <!-- CTA 3: Map — icona constel·lació, dues línies text -->
+            <button type="button" class="btn btn-map" data-goto="3">
+              <svg class="btn-map-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="0.9" aria-hidden="true" style="width:32px;height:32px">
+                <circle cx="14" cy="10" r="2" fill="currentColor" opacity=".9"/>
+                <circle cx="30" cy="8"  r="1.4" fill="currentColor" opacity=".7"/>
+                <circle cx="22" cy="20" r="1.8" fill="currentColor" opacity=".85"/>
+                <circle cx="10" cy="28" r="1.4" fill="currentColor" opacity=".65"/>
+                <circle cx="34" cy="26" r="2"   fill="currentColor" opacity=".9"/>
+                <circle cx="20" cy="36" r="1.2" fill="currentColor" opacity=".6"/>
+                <circle cx="38" cy="16" r="1.2" fill="currentColor" opacity=".55"/>
+                <line x1="14" y1="10" x2="30" y2="8"  stroke-dasharray="1 2" opacity=".5"/>
+                <line x1="30" y1="8"  x2="22" y2="20" stroke-dasharray="1 2" opacity=".5"/>
+                <line x1="22" y1="20" x2="34" y2="26" stroke-dasharray="1 2" opacity=".5"/>
+                <line x1="22" y1="20" x2="10" y2="28" stroke-dasharray="1 2" opacity=".4"/>
+                <line x1="10" y1="28" x2="20" y2="36" stroke-dasharray="1 2" opacity=".4"/>
+                <line x1="30" y1="8"  x2="38" y2="16" stroke-dasharray="1 2" opacity=".35"/>
+              </svg>
+              <div class="btn-map-text">
+                <span class="btn-map-label" data-i18n="scroll.hint">Desliza para explorar</span>
+                <span class="btn-map-title" data-i18n="hero.cta.map">Mapa d'intencions</span>
+              </div>
+              <span class="btn-map-arrow">→</span>
             </button>
           </div>
         </div>
