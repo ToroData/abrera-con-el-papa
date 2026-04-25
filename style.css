@@ -1690,3 +1690,31 @@ h1, h2, h3, h4 {
   .scroller { transition: none !important; }
   .stagger > *, .fade-up { opacity: 1 !important; transform: none !important; }
 }
+
+.scene-watermark {
+
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  pointer-events: none;
+
+  z-index: 0;
+
+}
+
+.scene-watermark img {
+
+  width: min(60vh, 500px);
+
+  height: auto;
+
+  opacity: 0.04;
+
+}
