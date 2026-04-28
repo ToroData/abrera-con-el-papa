@@ -666,18 +666,64 @@
 
     const status = form.querySelector('.form-status');
     const submit = form.querySelector('button[type="submit"]');
+    const nomEl = form.querySelector('[name="nom"]');
+    const parEl = form.querySelector('[name="parroquia"]');
+    const errText = document.getElementById('err-text');
+    const errNom  = document.getElementById('err-nom');
+    const errPar  = document.getElementById('err-parroquia');
+    const toast   = document.getElementById('form-toast');
+    let toastTimer = null;
+
+    function setFieldError(inputEl, errEl, msg) {
+      inputEl.classList.add(inputEl.tagName === 'TEXTAREA' ? 'textarea--error' : 'input--error');
+      if (errEl) { errEl.textContent = msg; errEl.classList.add('show'); }
+    }
+    function clearFieldError(inputEl, errEl) {
+      inputEl.classList.remove('input--error', 'textarea--error');
+      if (errEl) { errEl.textContent = ''; errEl.classList.remove('show'); }
+    }
+    function showToast(msg) {
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+
+    // Clear errors as the user types
+    ta.addEventListener('input', () => clearFieldError(ta, errText));
+    nomEl.addEventListener('input', () => clearFieldError(nomEl, errNom));
+    parEl.addEventListener('input', () => clearFieldError(parEl, errPar));
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      status.classList.remove('show', 'error');
+      clearFieldError(ta, errText);
+      clearFieldError(nomEl, errNom);
+      clearFieldError(parEl, errPar);
+
       const data = {
         text: (ta.value || '').trim(),
-        nom: form.querySelector('[name="nom"]').value.trim(),
-        parroquia: form.querySelector('[name="parroquia"]').value.trim(),
+        nom: nomEl.value.trim(),
+        parroquia: parEl.value.trim(),
         rezare: form.querySelector('[name="rezare"]').checked,
       };
-      if (!data.text) return;
+
+      let hasError = false;
+      if (!data.parroquia) { setFieldError(parEl, errPar, window.t('intentions.form.err.parish')); hasError = true; }
+      if (!data.nom)       { setFieldError(nomEl, errNom, window.t('intentions.form.err.name')); hasError = true; }
+      if (!data.text)      { setFieldError(ta, errText, window.t('intentions.form.err.text')); hasError = true; }
+      if (hasError) {
+        showToast(window.t('intentions.form.err.missing'));
+        // Focus first invalid field
+        if (!data.text) ta.focus();
+        else if (!data.nom) nomEl.focus();
+        else parEl.focus();
+        return;
+      }
+
       submit.disabled = true;
       submit.textContent = window.t('intentions.form.sending');
-      status.classList.remove('show', 'error');
       const hasApi = CONFIG.sheetsApiUrl && CONFIG.sheetsApiUrl !== 'PLACEHOLDER_URL';
       let ok = true;
       if (hasApi) {

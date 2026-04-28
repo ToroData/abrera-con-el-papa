@@ -12,6 +12,10 @@
   const tooltip = document.querySelector('.constellation-tooltip');
   if (!canvas || !wrap || !tooltip) return;
 
+  // Move tooltip to <body> so position:fixed works correctly even when
+  // ancestor elements (.fade-up) have CSS transforms applied.
+  document.body.appendChild(tooltip);
+
   const ctx = canvas.getContext('2d');
 
   const state = {
@@ -319,16 +323,30 @@
   }
 
   // ----- Tooltip -----
+  // Tooltip uses position:fixed, so all coords are viewport-relative.
   function showTooltip(starIdx, mx, my) {
     const s = state.stars[starIdx]; if (!s) return;
     const text = s.intention.text || s.intention;
     tooltip.innerHTML = `<div>${escapeHTML(text)}</div>`;
     tooltip.classList.add('show');
     const tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
-    let x = mx + 14, y = my + 14;
-    if (x + tw > state.w - 8) x = mx - tw - 14;
-    if (y + th > state.h - 8) y = my - th - 14;
-    if (x < 8) x = 8; if (y < 8) y = 8;
+    const rect = canvas.getBoundingClientRect();
+    const vw = window.innerWidth, vh = window.innerHeight;
+    // Convert canvas-local coords → viewport coords
+    let x = rect.left + mx + 14;
+    let y;
+    if (state.isTouch) {
+      // Show above the finger so the hand doesn't hide the text
+      y = rect.top + my - th - 20;
+      if (y < 8) y = rect.top + my + 14; // not enough room above → flip below
+    } else {
+      y = rect.top + my + 14;
+      if (y + th > vh - 8) y = rect.top + my - th - 14;
+    }
+    if (x + tw > vw - 8) x = vw - tw - 8;
+    if (x < 8) x = 8;
+    if (y + th > vh - 8) y = vh - th - 8;
+    if (y < 8) y = 8;
     tooltip.style.transform = `translate(${x}px, ${y}px)`;
   }
   function hideTooltip() { tooltip.classList.remove('show'); }
@@ -536,6 +554,16 @@
   document.getElementById('cst-zoom-in')?.addEventListener('click', () => zoomBy(1.35));
   document.getElementById('cst-zoom-out')?.addEventListener('click', () => zoomBy(1 / 1.35));
   document.getElementById('cst-search-input')?.addEventListener('input', onSearchInput);
+
+  // On touch: dismiss the tooltip when tapping outside the canvas
+  if (state.isTouch) {
+    document.addEventListener('touchstart', (e) => {
+      if (state.active !== null && !canvas.contains(e.target)) {
+        state.active = null;
+        hideTooltip();
+      }
+    }, { passive: true });
+  }
 
   window.addEventListener('resize', resize, { passive: true });
 

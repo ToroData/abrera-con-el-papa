@@ -898,7 +898,7 @@ h1, h2, h3, h4 {
 }
 
 .constellation-tooltip {
-  position: absolute;
+  position: fixed;
   left: 0; top: 0;
   pointer-events: none;
   background: var(--overlay-strong);
@@ -907,11 +907,11 @@ h1, h2, h3, h4 {
   font-family: var(--font-body);
   font-size: 15px;
   color: var(--vatican-white);
-  max-width: 280px;
+  max-width: min(280px, calc(100vw - 24px));
   opacity: 0;
   transform: translateY(4px);
   transition: opacity 180ms, transform 180ms;
-  z-index: 3;
+  z-index: 200;
   line-height: 1.4;
   backdrop-filter: blur(8px);
 }
@@ -1126,6 +1126,54 @@ h1, h2, h3, h4 {
 .input:focus, .textarea:focus { outline: 0; border-bottom-color: var(--vatican-yellow); }
 .input::placeholder, .textarea::placeholder { color: var(--text-hint); font-style: italic; }
 .textarea { min-height: 96px; resize: none; line-height: 1.5; }
+
+.input--error, .textarea--error {
+  border-bottom-color: var(--cardinal-red-bright) !important;
+  color: var(--vatican-white);
+}
+.field-error-msg {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cardinal-red-bright);
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 200ms, transform 200ms, height 200ms;
+}
+.field-error-msg.show {
+  opacity: 1;
+  transform: translateY(0);
+  height: auto;
+  margin-top: 4px;
+}
+
+.form-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--cardinal-red);
+  color: #fff;
+  padding: 13px 22px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms, transform 250ms;
+  border: 1px solid var(--cardinal-red-bright);
+  text-align: center;
+  max-width: calc(100vw - 32px);
+}
+.form-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
 
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4); }
 @media (max-width: 480px) { .grid-2 { grid-template-columns: 1fr; } }
