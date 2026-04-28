@@ -1431,6 +1431,38 @@ h1, h2, h3, h4 {
 }
 
 
+.hero-papa-stencil {
+  position: absolute;
+  right: 45%;
+  top: 54%;
+  transform: translateY(-50%);
+  height: min(50vh, 400px);
+  width: auto;
+  object-fit: contain;
+  object-position: right center;
+  opacity: 0.11;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: grayscale(1) brightness(1.4);
+  z-index: 1;
+}
+@media (max-width: 900px) {
+  .hero-papa-stencil {
+    right: -4%;
+    top: 56%;
+    height: min(44vh, 320px);
+    opacity: 0.09;
+  }
+}
+@media (max-width: 768px) {
+  .hero-papa-stencil {
+    right: -21%;
+    top: 13%;
+    height: min(38vh, 260px);
+    opacity: 0.09;
+  }
+}
+
 .papal-stamp {
   position: absolute;
   right: -100px;
@@ -1717,4 +1749,286 @@ h1, h2, h3, h4 {
 
   opacity: 0.04;
 
+}
+
+
+/* ── Post author avatar ── */
+.post-meta { align-items: center; }
+.post-author-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.post-author-pic {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--vatican-yellow-deep);
+  flex-shrink: 0;
+}
+.post-author-pic--lg {
+  width: 32px;
+  height: 32px;
+}
+.post-modal-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+
+
+/* ── Reels scene ── */
+.scene-reels .scene-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+}
+
+.reels-layout {
+  display: flex;
+  gap: var(--s-7);
+  align-items: center;
+}
+
+.reels-panel {
+  flex: 1;
+  max-width: 460px;
+  min-width: 0;
+}
+
+.reels-desc {
+  color: var(--text-dim);
+  font-size: 17px;
+  font-style: italic;
+  line-height: 1.55;
+  margin: 0 0 var(--s-3);
+}
+
+.reels-meta-panel {
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+}
+
+.reels-meta-date { margin-top: var(--s-2); }
+
+.reels-stage-wrap {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.reels-stage {
+  position: relative;
+  height: min(58vh, 460px);
+  aspect-ratio: 9 / 16;
+  background: var(--ink-3);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.reel-card {
+  position: absolute;
+  inset: 0;
+  transform: translateY(100%);
+  pointer-events: none;
+  transition: transform 480ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.reel-card.above {
+  transform: translateY(-100%);
+}
+.reel-card.active {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.reel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.reel-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(
+    to top,
+    rgba(6, 6, 11, 0.92) 0%,
+    rgba(6, 6, 11, 0.55) 35%,
+    rgba(6, 6, 11, 0.08) 60%,
+    transparent 80%
+  );
+  pointer-events: none;
+  padding: var(--s-4);
+}
+
+.reel-overlay-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reel-overlay-author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(244, 239, 228, 0.7);
+}
+
+.reel-overlay-sep { opacity: 0.4; }
+.reel-overlay-date { color: rgba(244, 239, 228, 0.5); }
+
+.reel-overlay-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.25;
+  color: var(--vatican-white);
+  text-shadow: 0 1px 8px rgba(6, 6, 11, 0.8);
+}
+
+.reel-overlay-desc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.45;
+  color: rgba(244, 239, 228, 0.72);
+  margin-top: 4px;
+  text-shadow: 0 1px 6px rgba(6, 6, 11, 0.9);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.reel-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 6, 11, 0.55);
+  border: 1px solid rgba(244, 239, 228, 0.28);
+  border-radius: 50%;
+  color: var(--vatican-white);
+  opacity: 1;
+  transition: opacity 300ms, background 200ms, border-color 200ms;
+  z-index: 2;
+}
+.reel-play-btn.playing { opacity: 0; }
+.reel-card.active:hover .reel-play-btn { opacity: 1 !important; }
+.reel-play-btn:hover {
+  background: rgba(255, 217, 90, 0.18);
+  border-color: var(--vatican-yellow);
+  color: var(--vatican-yellow);
+}
+
+.reel-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(244, 239, 228, 0.15);
+  z-index: 3;
+}
+.reel-progress-fill {
+  height: 100%;
+  background: var(--vatican-yellow);
+  width: 0;
+  transition: width 0.25s linear;
+}
+
+.reels-nav-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-3);
+  flex-shrink: 0;
+}
+
+.reel-nav-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--vatican-white);
+  background: rgba(6, 6, 11, 0.4);
+  font-size: 13px;
+  transition: all 200ms;
+  backdrop-filter: blur(4px);
+}
+.reel-nav-btn:hover:not(:disabled) {
+  border-color: var(--vatican-yellow);
+  color: var(--vatican-yellow);
+}
+.reel-nav-btn:disabled { opacity: 0.2; cursor: default; }
+
+.reel-dots-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--s-2) 0;
+}
+.reel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  cursor: pointer;
+  transition: all 200ms;
+}
+.reel-dot:hover { border-color: var(--vatican-yellow); }
+.reel-dot.active {
+  background: var(--vatican-yellow);
+  border-color: var(--vatican-yellow);
+  box-shadow: 0 0 6px var(--vatican-yellow);
+}
+
+@media (max-width: 767px) {
+  .reels-layout {
+    flex-direction: column-reverse;
+    gap: var(--s-4);
+    align-items: stretch;
+  }
+  .reels-stage-wrap {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s-3);
+  }
+  .reels-stage {
+    height: auto;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+    aspect-ratio: 9 / 16;
+  }
+  .reels-nav-col {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .reel-dots-list {
+    flex-direction: row;
+    padding: 0 var(--s-2);
+  }
+  .reels-panel { max-width: 100%; }
 }

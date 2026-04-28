@@ -296,21 +296,29 @@
   async function loadData() {
     const hasApi = CONFIG.sheetsApiUrl && CONFIG.sheetsApiUrl !== 'PLACEHOLDER_URL';
     if (!hasApi) {
-      return { metrics: CONFIG.fallback.metrics, intentions: CONFIG.fallback.intencions, posts: CONFIG.fallback.posts, gallery: CONFIG.fallback.galeria };
+      return {
+        metrics: CONFIG.fallback.metrics,
+        intentions: CONFIG.fallback.intencions,
+        posts: CONFIG.fallback.posts,
+        gallery: CONFIG.fallback.galeria,
+        reels: CONFIG.fallback.reels || [],
+      };
     }
-    const [m, i, p, g] = await Promise.allSettled([
+    const [m, i, p, g, r] = await Promise.allSettled([
       fetchJson(CONFIG.sheetsApiUrl + '?tab=metriques'),
       fetchJson(CONFIG.sheetsApiUrl + '?tab=intencions'),
       fetchJson(CONFIG.sheetsApiUrl + '?tab=posts'),
       fetchJson(CONFIG.sheetsApiUrl + '?tab=galeria'),
+      fetchJson(CONFIG.sheetsApiUrl + '?tab=reels'),
     ]);
-    const asArray = (r, fb) => (r.status === 'fulfilled' && Array.isArray(r.value)) ? r.value : fb;
-    const asObject = (r, fb) => (r.status === 'fulfilled' && r.value && typeof r.value === 'object' && !Array.isArray(r.value) && !r.value.error) ? r.value : fb;
+    const asArray = (res, fb) => (res.status === 'fulfilled' && Array.isArray(res.value)) ? res.value : fb;
+    const asObject = (res, fb) => (res.status === 'fulfilled' && res.value && typeof res.value === 'object' && !Array.isArray(res.value) && !res.value.error) ? res.value : fb;
     return {
       metrics: asObject(m, CONFIG.fallback.metrics),
       intentions: asArray(i, CONFIG.fallback.intencions),
       posts: asArray(p, CONFIG.fallback.posts),
       gallery: asArray(g, CONFIG.fallback.galeria),
+      reels: asArray(r, CONFIG.fallback.reels || []),
     };
   }
 
@@ -323,12 +331,22 @@
     if (cstCount && m.intencions != null) countUp(cstCount, m.intencions);
   }
 
+  const FRANCISCO_AUTOR = 'Mn. Francisco García Baca';
+  const FRANCISCO_PIC = 'https://dxup7x5ioy4or.cloudfront.net/profile-pic-francisco.png';
+
+  function authorHtml(autor, picClass) {
+    if ((autor || '').trim() === FRANCISCO_AUTOR) {
+      return `<div class="post-author-inline"><img class="post-author-pic${picClass ? ' ' + picClass : ''}" src="${FRANCISCO_PIC}" alt="${escapeHTML(autor)}"><span>${escapeHTML(autor)}</span></div>`;
+    }
+    return `<span class="post-dot">·</span><span>${escapeHTML(autor || 'Mn. Francisco')}</span>`;
+  }
+
   function renderPosts(posts) {
     const grid = document.getElementById('posts-grid');
     if (!grid) return;
     grid.innerHTML = '';
     const lang = window.I18N_STATE.lang;
-    posts.forEach((p, idx) => {
+    posts.forEach((p) => {
       const titol = p['titol_' + lang] || p.titol_ca || p.titol || '';
       const cos = p['cos_' + lang] || p.cos_ca || p.cos || '';
       const preview = cos.length > 180 ? cos.slice(0, 180).trim() + '…' : cos;
@@ -337,13 +355,12 @@
       card.innerHTML = `
         <div class="post-meta">
           <span class="post-date">${formatDate(p.data, lang)}</span>
-          <span class="post-dot">·</span>
-          <span>${escapeHTML(p.autor || 'Mn. Francisco')}</span>
+          ${authorHtml(p.autor, '')}
         </div>
         <h3 class="post-title">${escapeHTML(titol)}</h3>
         <p class="post-body">${escapeHTML(preview)}</p>
         <div class="post-read">
-          <span data-i18n="post.readMore">${window.t('post.readMore')}</span>
+          <span>${window.t('post.readMore')}</span>
           <span class="arrow">→</span>
         </div>`;
       card.addEventListener('click', () => openPostModal(p, titol, cos));
@@ -356,7 +373,7 @@
     const m = document.getElementById('post-modal');
     if (!m) return;
     m.querySelector('.post-modal-meta').innerHTML =
-      `<span class="post-date">${formatDate(p.data, lang)}</span> <span class="post-dot">·</span> <span>${escapeHTML(p.autor || 'Mn. Francisco')}</span>`;
+      `<span class="post-date">${formatDate(p.data, lang)}</span> ${authorHtml(p.autor, 'post-author-pic--lg')}`;
     m.querySelector('.post-modal-title').textContent = titol;
     const body = m.querySelector('.post-modal-body');
     body.innerHTML = cos.split(/\n\s*\n/).map((para) => `<p>${escapeHTML(para)}</p>`).join('');
@@ -370,6 +387,198 @@
     m.querySelector('.modal-close').addEventListener('click', () => m.classList.remove('show'));
     m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('show'); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') m.classList.remove('show'); });
+  }
+
+  function renderReels(reels) {
+    const stage = document.getElementById('reels-stage');
+    const metaPanel = document.getElementById('reels-meta-panel');
+    const dotsEl = document.getElementById('reel-dots');
+    const prevBtn = document.getElementById('reel-prev');
+    const nextBtn = document.getElementById('reel-next');
+    if (!stage || !reels || !reels.length) return;
+
+    let current = 0;
+    let isPlaying = false;
+
+    function buildCards() {
+      stage.innerHTML = '';
+      const lang = window.I18N_STATE.lang;
+      reels.forEach((r, i) => {
+        const titol = r['titol_' + lang] || r.titol_ca || r.titol || '';
+        const desc = r['desc_' + lang] || r.desc_ca || r.desc || '';
+        const card = document.createElement('div');
+        card.className = 'reel-card' + (i === current ? ' active' : '');
+        card.innerHTML = `
+          <video class="reel-video" src="${escapeHTML(r.url_video || '')}" playsinline preload="metadata" loop></video>
+          <div class="reel-overlay">
+            <div class="reel-overlay-bottom">
+              <div class="reel-overlay-author">
+                <span>${escapeHTML(r.autor || '')}</span>
+                <span class="reel-overlay-sep">·</span>
+                <span class="reel-overlay-date">${formatDate(r.data, lang)}</span>
+              </div>
+              <div class="reel-overlay-title">${escapeHTML(titol)}</div>
+              ${desc ? `<div class="reel-overlay-desc">${escapeHTML(desc)}</div>` : ''}
+            </div>
+          </div>
+          <button class="reel-play-btn" aria-label="Play/Pause">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="reel-progress"><div class="reel-progress-fill"></div></div>`;
+        stage.appendChild(card);
+      });
+    }
+
+    function buildDots() {
+      if (!dotsEl) return;
+      dotsEl.innerHTML = '';
+      reels.forEach((_, i) => {
+        const d = document.createElement('button');
+        d.type = 'button';
+        d.className = 'reel-dot' + (i === current ? ' active' : '');
+        d.setAttribute('aria-label', `Reel ${i + 1}`);
+        d.addEventListener('click', () => goTo(i));
+        dotsEl.appendChild(d);
+      });
+    }
+
+    function updateMeta(idx) {
+      if (!metaPanel) return;
+      const r = reels[idx];
+      const lang = window.I18N_STATE.lang;
+      const desc = r['desc_' + lang] || r.desc_ca || r.desc || '';
+      metaPanel.innerHTML = `
+        <p class="reels-desc">${escapeHTML(desc)}</p>
+        <div class="reels-meta-date"><span class="post-date">${formatDate(r.data, lang)}</span></div>`;
+    }
+
+    function updatePlayBtn(playing) {
+      const btn = stage.querySelector('.reel-card.active .reel-play-btn');
+      if (!btn) return;
+      const playIcon = `<svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M8 5v14l11-7z"/></svg>`;
+      const pauseIcon = `<svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+      btn.innerHTML = playing ? pauseIcon : playIcon;
+      btn.classList.toggle('playing', playing);
+    }
+
+    function instantPos(card, above) {
+      card.style.transition = 'none';
+      if (above) card.classList.add('above');
+      else card.classList.remove('above');
+      card.getBoundingClientRect();
+      card.style.transition = '';
+    }
+
+    function step(delta) {
+      const n = reels.length;
+      goTo(((current + delta) % n + n) % n, delta > 0 ? 1 : -1);
+    }
+
+    function goTo(idx, forceDir) {
+      if (idx < 0 || idx >= reels.length || idx === current) return;
+      const dir = forceDir !== undefined ? forceDir : (idx > current ? 1 : -1);
+      const cards = [...stage.querySelectorAll('.reel-card')];
+      const dots = dotsEl ? [...dotsEl.querySelectorAll('.reel-dot')] : [];
+
+      const currVideo = cards[current].querySelector('.reel-video');
+      if (currVideo) currVideo.pause();
+      isPlaying = false;
+
+      cards[current].classList.remove('active');
+      if (dir > 0) {
+        cards[current].classList.add('above');
+      }
+
+      const target = cards[idx];
+      if (dir < 0) {
+        instantPos(target, true);
+      } else if (target.classList.contains('above')) {
+        instantPos(target, false);
+      }
+
+      current = idx;
+      target.classList.remove('above');
+      target.classList.add('active');
+
+      dots.forEach((d, k) => d.classList.toggle('active', k === current));
+      if (prevBtn) prevBtn.disabled = false;
+      if (nextBtn) nextBtn.disabled = false;
+      updateMeta(current);
+      updatePlayBtn(false);
+
+      const newVideo = target.querySelector('.reel-video');
+      if (newVideo) {
+        newVideo.currentTime = 0;
+        newVideo.play().then(() => { isPlaying = true; updatePlayBtn(true); }).catch(() => {});
+      }
+    }
+
+    buildCards();
+    buildDots();
+    updateMeta(0);
+    if (prevBtn) { prevBtn.addEventListener('click', () => step(-1)); }
+    if (nextBtn) nextBtn.addEventListener('click', () => step(1));
+
+    stage.addEventListener('click', (e) => {
+      if (!e.target.closest('.reel-play-btn')) return;
+      const video = stage.querySelector('.reel-card.active .reel-video');
+      if (!video) return;
+      if (isPlaying) { video.pause(); isPlaying = false; }
+      else { video.play().catch(() => {}); isPlaying = true; }
+      updatePlayBtn(isPlaying);
+    });
+
+    stage.addEventListener('timeupdate', (e) => {
+      if (!e.target.classList.contains('reel-video')) return;
+      const card = e.target.closest('.reel-card.active');
+      if (!card || !e.target.duration) return;
+      const fill = card.querySelector('.reel-progress-fill');
+      if (fill) fill.style.width = `${(e.target.currentTime / e.target.duration) * 100}%`;
+    }, true);
+
+    let reelWheelLock = false;
+    stage.addEventListener('wheel', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if (reelWheelLock) return;
+      reelWheelLock = true;
+      const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      if (Math.abs(d) > 5) step(d > 0 ? 1 : -1);
+      setTimeout(() => { reelWheelLock = false; }, 700);
+    }, { passive: false });
+
+    let touchStartY = 0, touchStartX = 0, touchSwiping = false;
+    stage.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
+      touchSwiping = false;
+    }, { passive: true });
+    stage.addEventListener('touchmove', (e) => {
+      const dy = Math.abs(e.touches[0].clientY - touchStartY);
+      const dx = Math.abs(e.touches[0].clientX - touchStartX);
+      if (dy > 8 && dy > dx) { touchSwiping = true; e.preventDefault(); }
+    }, { passive: false });
+    stage.addEventListener('touchend', (e) => {
+      if (!touchSwiping) return;
+      const dy = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(dy) > 40) step(dy > 0 ? 1 : -1);
+      touchSwiping = false;
+    }, { passive: true });
+
+    window.onLangChange(() => {
+      const lang = window.I18N_STATE.lang;
+      stage.querySelectorAll('.reel-card').forEach((card, i) => {
+        const r = reels[i];
+        if (!r) return;
+        const titleEl = card.querySelector('.reel-overlay-title');
+        if (titleEl) titleEl.textContent = r['titol_' + lang] || r.titol_ca || '';
+        const dateEl = card.querySelector('.reel-overlay-date');
+        if (dateEl) dateEl.textContent = formatDate(r.data, lang);
+        const descEl = card.querySelector('.reel-overlay-desc');
+        if (descEl) descEl.textContent = r['desc_' + lang] || r.desc_ca || r.desc || '';
+      });
+      updateMeta(current);
+    });
   }
 
   function renderGallery(items) {
@@ -559,6 +768,7 @@
 
     if (data.intentions && !CONFIG.demoIntentions) window.ConstellationAPI?.seed(data.intentions);
     if (data.posts) { window.__lastPosts = data.posts; renderPosts(data.posts); }
+    renderReels(data.reels);
     renderGallery(data.gallery);
 
     const saved = parseInt(localStorage.getItem('abrera.scene') || '0', 10);

@@ -90,6 +90,9 @@
 
   <!-- ========== Scene 1: Hero ========== -->
   <section class="scene scene-hero active" data-scene="1" data-name-ca="Inici" data-name-es="Inicio">
+    <!-- papa stencil watermark -->
+    <img class="hero-papa-stencil" src="img/papa-stencil.png" alt="" aria-hidden="true">
+
     <!-- papal stamp in background -->
     <div class="papal-stamp" aria-hidden="true">
       <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.6">
@@ -374,8 +377,32 @@
     </div>
   </section>
 
-  <!-- ========== Scene 5: Gallery ========== -->
-  <section class="scene scene-gallery" data-scene="5" data-name-ca="Galeria" data-name-es="Galería">
+  <!-- ========== Scene 5: Reels ========== -->
+  <section class="scene scene-reels" data-scene="5" data-name-ca="Vídeos" data-name-es="Vídeos">
+    <div class="scene-inner stagger">
+      <div class="prep-head">
+        <div class="section-kicker"><span>✢</span><span data-i18n="reels.badge">Preparació</span></div>
+        <h2 class="section-title" data-i18n="reels.title">Com ens preparem.</h2>
+        <p class="prep-lead" data-i18n="reels.sub">Vídeos del nostre camí cap a la vigília.</p>
+      </div>
+      <div class="reels-layout">
+        <div class="reels-panel">
+          <div class="reels-meta-panel" id="reels-meta-panel"></div>
+        </div>
+        <div class="reels-stage-wrap">
+          <div class="reels-stage" id="reels-stage"></div>
+          <div class="reels-nav-col">
+            <button class="reel-nav-btn" id="reel-prev" aria-label="Anterior" disabled>↑</button>
+            <div class="reel-dots-list" id="reel-dots"></div>
+            <button class="reel-nav-btn" id="reel-next" aria-label="Següent">↓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Scene 6: Gallery ========== -->
+  <section class="scene scene-gallery" data-scene="6" data-name-ca="Galeria" data-name-es="Galería">
     <div class="scene-inner stagger">
       <div class="prep-head">
         <div class="section-kicker"><span>✢</span><span data-i18n="gallery.badge">Memòria</span></div>
