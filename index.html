@@ -16,7 +16,7 @@
 <link rel="icon" type="image/png" href="img/favicon.svg"><!-- fallback -->
 <link rel="apple-touch-icon" href="img/favicon.svg">
 
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 
 <body>
@@ -322,7 +322,10 @@
         </div>
       </div>
 
+      <div class="constellation-block">
       <div class="constellation-wrap fade-up">
+        <canvas id="constellation" aria-label="Constel·lació d'intencions"></canvas>
+
         <div class="chart-ornament chart-ornament-tl" aria-hidden="true">
           <span class="ch-label">Ps 147,4</span>
           <span class="ch-coord">numerat stellas</span>
@@ -331,18 +334,10 @@
           <span class="ch-label" data-i18n="chart.night">Nit de vigília</span>
           <span class="ch-coord">09 · VI · MMXXVI</span>
         </div>
-        <div class="chart-ornament chart-ornament-bl" aria-hidden="true">
-          <button type="button" class="cst-ctrl" id="cst-reset" title="Re-centrar" aria-label="Re-centrar">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="1.5" fill="currentColor"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="10" y1="16" x2="10" y2="19"/><line x1="1" y1="10" x2="4" y2="10"/><line x1="16" y1="10" x2="19" y2="10"/></svg>
-          </button>
-          <span class="ch-coord" id="cst-zoom">1.0×</span>
-        </div>
         <div class="chart-ornament chart-ornament-br" aria-hidden="true">
           <span class="ch-label" data-i18n="chart.place">Montjuïc</span>
           <span class="ch-coord"><span id="cst-visible">0</span> / <span id="cst-total">0</span></span>
         </div>
-
-        <canvas id="constellation" aria-label="Constel·lació d'intencions"></canvas>
 
         <div class="chart-caption">
           <span class="ch-dot"></span>
@@ -356,6 +351,20 @@
         </div>
 
         <div class="constellation-tooltip" role="tooltip"></div>
+      </div>
+
+      <div class="cst-controls-bar">
+        <button type="button" class="cst-ctrl" id="cst-zoom-out" title="Allunyar" aria-label="Allunyar">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="4" y1="10" x2="16" y2="10"/></svg>
+        </button>
+        <button type="button" class="cst-ctrl" id="cst-reset" title="Re-centrar" aria-label="Re-centrar">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="1.5" fill="currentColor"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="10" y1="16" x2="10" y2="19"/><line x1="1" y1="10" x2="4" y2="10"/><line x1="16" y1="10" x2="19" y2="10"/></svg>
+        </button>
+        <button type="button" class="cst-ctrl" id="cst-zoom-in" title="Apropar" aria-label="Apropar">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/></svg>
+        </button>
+        <span class="ch-coord" id="cst-zoom">1.0×</span>
+      </div>
       </div>
 
     </div>
@@ -490,12 +499,12 @@
 </div>
 
 <!-- ============ Scripts ============ -->
-<script src="config.js?v=5"></script>
-<script src="i18n.js?v=5"></script>
-<script src="campanile.js?v=5"></script>
-<script src="stars.js?v=5"></script>
-<script src="constellation.js?v=5"></script>
-<script src="main.js?v=5"></script>
+<script src="config.js?v=6"></script>
+<script src="i18n.js?v=6"></script>
+<script src="campanile.js?v=6"></script>
+<script src="stars.js?v=6"></script>
+<script src="constellation.js?v=7"></script>
+<script src="main.js?v=6"></script>
 
 </body>
 </html>

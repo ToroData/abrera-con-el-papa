@@ -990,6 +990,19 @@ h1, h2, h3, h4 {
 .cst-ctrl:hover { background: var(--vatican-yellow); color: var(--ink); }
 .cst-ctrl svg { width: 14px; height: 14px; display: block; }
 
+.constellation-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.cst-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
 
 .cst-search {
   position: absolute;

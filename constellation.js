@@ -442,6 +442,8 @@
       state.cam.zoom = newZoom;
       clampCamera();
       refreshHUD();
+    } else if (e.touches.length === 1) {
+      e.preventDefault();
     }
   }
   function onTouchEnd(e) {
@@ -531,6 +533,8 @@
   canvas.style.cursor = state.isTouch ? '' : 'grab';
 
   document.getElementById('cst-reset')?.addEventListener('click', resetView);
+  document.getElementById('cst-zoom-in')?.addEventListener('click', () => zoomBy(1.35));
+  document.getElementById('cst-zoom-out')?.addEventListener('click', () => zoomBy(1 / 1.35));
   document.getElementById('cst-search-input')?.addEventListener('input', onSearchInput);
 
   window.addEventListener('resize', resize, { passive: true });
