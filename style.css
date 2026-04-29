@@ -1504,7 +1504,7 @@ h1, h2, h3, h4 {
   opacity: 0.11;
   pointer-events: none;
   mix-blend-mode: screen;
-  filter: grayscale(1) brightness(1.4);
+  filter: grayscale(1) brightness(0.45);
   z-index: 1;
 }
 @media (max-width: 900px) {

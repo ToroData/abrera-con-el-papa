@@ -588,9 +588,9 @@
       wrap.innerHTML = `
         <div class="gallery-empty">
           <canvas class="gallery-empty-canvas" id="empty-canvas"></canvas>
-          <h3 class="gallery-empty-title">${window.t('gallery.empty.title')}</h3>
-          <p class="gallery-empty-body">${window.t('gallery.empty.body')}</p>
-          <span class="ribbon gallery-empty-badge">${window.t('gallery.empty.badge')}</span>
+          <h3 class="gallery-empty-title" data-i18n="gallery.empty.title">${window.t('gallery.empty.title')}</h3>
+          <p class="gallery-empty-body" data-i18n="gallery.empty.body">${window.t('gallery.empty.body')}</p>
+          <span class="ribbon gallery-empty-badge" data-i18n="gallery.empty.badge">${window.t('gallery.empty.badge')}</span>
         </div>`;
       animateEmptyGallery();
       return;

@@ -86,7 +86,7 @@ window.I18N = {
 
     // Footer
     'footer.parrish': 'Parròquia Sant Pere · Abrera',
-    'footer.sub': 'Una iniciativa de la comunitat per a tota la diòcesi',
+    'footer.sub': 'Una iniciativa oberta a la comunitat',
     'footer.year': '© 2026',
 
     // Loader
@@ -202,7 +202,7 @@ window.I18N = {
     'gallery.empty.body': 'Después de la vigilia, este espacio se llenará de las fotografías que hagáis. Traed los ojos bien abiertos.',
 
     'footer.parrish': 'Parroquia Sant Pere · Abrera',
-    'footer.sub': 'Una iniciativa de la comunidad para toda la diócesis',
+    'footer.sub': 'Una iniciativa abierta ala comunidad',
     'footer.year': '© 2026',
 
     'loader.text': 'Dibujando la constelación',
