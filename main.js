@@ -329,6 +329,13 @@
     set('metric-parroquies', m.parroquies ?? 0);
     const cstCount = document.getElementById('cst-count');
     if (cstCount && m.intencions != null) countUp(cstCount, m.intencions);
+    if (typeof gtag === 'function') {
+      gtag('event', 'vigilia_metrics', {
+        inscrits: m.inscrits ?? 0,
+        intencions: m.intencions ?? 0,
+        parroquies: m.parroquies ?? 0,
+      });
+    }
   }
 
   const FRANCISCO_AUTOR = 'Mn. Francisco García Baca';
@@ -732,6 +739,7 @@
       } else { await new Promise((r) => setTimeout(r, 600)); }
       if (ok) {
         window.ConstellationAPI?.add({ text: data.text });
+        if (typeof gtag === 'function') gtag('event', 'intention_submitted');
         status.textContent = window.t('intentions.form.success');
         status.classList.add('show');
         form.reset(); upd();
